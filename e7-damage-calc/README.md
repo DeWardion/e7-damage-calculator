@@ -1,21 +1,12 @@
 ## Todo List/Roadmap
-
-- ~~Add offensive artifacts (Portrait of the Saviors, Elyha's Knife)~~
-  - Add more
-- ~~Improve sliders (easier, more accurate inputs)~~
-- ~~Add Passive Skill boosts (Lorina, Luna, BBK)~~
-- Add defensive artifacts (Noble Oath, Adamant Shield)
-- ~~Preset gear values (atk, crit dmg)~~
-- ~~Preset Defense values (eg. hunts)~~
-  - ~~Add more~~
-- ~~Extra-attack (Sven, Clarissa, Vivian, Alexa)~~
-- ~~Display increased damage % from molas~~
-- Display multipliers
-- ~~Rage Set multiplier~~
-- Make Reingard's Drink only apply to AoE attacks
-- ~~Filter artifacts list by Hero type~~
+-~~Fix artifacts
+-~~Fix heroes: Ains, Alexa (Probably more)
+-~~Add "forms"
+-~~More UI improvements
+-~~Eventually a hunt simulator tm
 
 ### Disclaimer
+Data from heroes.js and artifacts.js is from maphe.github.io
 
 Heroes that might need a rework/double-check:
 - Cidd

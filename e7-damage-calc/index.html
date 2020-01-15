@@ -1,307 +1,59 @@
-<html lang="en">
-    <head>
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-147508975-1"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-
-          gtag('config', 'UA-147508975-1', { 'page_title' : 'calculator', 'page_path': '/e7-damage-calc/' });
-        </script>
-
-        <meta charset="utf-8" />
-        <meta name="keywords" content="epic seven damage calculator, epic 7 damage calculator, e7 damage calculator" />
-        <meta name="description" content="Damage Calculator for Epic Seven for every hero in the game. Enter your hero stats to get their damage potential." />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.12/dist/css/bootstrap-select.min.css" />
-        <link rel="stylesheet" href="style.css" />
-
-        <title>Epic7 Damage Calculator</title>
-    </head>
-    <body class="container">
-        <h1 class="mt-3">Epic7 Damage Calculator</h1>
-<!--        <div class="alert alert-warning alert-dismissible fade show" role="alert">-->
-<!--            <strong>Jan 9, Update:</strong> Added Hero: Ambitious Tywin ; Added Exclusive Equipment for: Kayron, Yufine & Sigret-->
-<!--            <button type="button" class="close" data-dismiss="alert" aria-label="Close">-->
-<!--                <span aria-hidden="true">&times;</span>-->
-<!--            </button>-->
-<!--        </div>-->
-        <div>
-            <form id="stats">
-                <h4>Hero</h4>
-                <div id="hero-block">
-                    <div class="row">
-                        <div class="form-group col-md-4 col-sm-12">
-                            <select id="hero" name="hero" class="form-control custom-select selectpicker" data-live-search="true" data-size="12">
-                            </select>
-                        </div>
-                        <div class="form-group col-md-4 col-sm-12">
-                            <select id="artifact" name="artifact" class="form-control custom-select selectpicker" data-live-search="true" data-size="12" data-none-selected-text="Artifact">
-                            </select>
-                        </div>
-                        <div class="form-group col-md-4 col-sm-12">
-                            <select id="atk-preset" name="atk-preset" class="form-control custom-select selectpicker" data-size="12" data-show-subtext="true">
-                                <option value="">Manual</option>
-                                <option data-divider="true"></option>
-                                <option value="starter" data-atk="2500" data-crit="175" data-subtext="(2500/175%)">Starter gear</option>
-                                <option value="attack" data-atk="6500" data-crit="150" data-subtext="(6500/150%)">All in Attack</option>
-                                <option value="crit" data-atk="2500" data-crit="350" data-subtext="(2500/350%)">All in Crit Dmg</option>
-                                <option value="elite" data-atk="5000" data-crit="300" data-subtext="(5000/300%)">Elite balanced</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div id="hero-info"></div>
-
-                    <div class="stat-block">
-                        <div class="form-group row col-sm-12">
-                            <label for="atk" class="col-md-9 col-form-label form-control-sm"><h5>Attack</h5></label>
-                            <div class="input-group input-group-sm col-md-3">
-                                <div class="input-group-prepend">
-                                    <button class="btn btn-outline-secondary" type="button" id="atk-minus" onclick="minus('atk')">&minus;</button>
-                                </div>
-                                <input type="number" class="form-control text-center" id="atk" value="2500" onkeyup="update('atk')">
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="button" id="atk-plus" onclick="plus('atk')">&plus;</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row col-sm-12 mb-4">
-                            <input type="range" class="custom-range" id="atk-slide" min="200" max="10000" value="2500" oninput="slide('atk')" data-for="atk">
-                        </div>
-                    </div>
-
-                    <div class="stat-block">
-                        <div class="form-group row col-sm-12">
-                            <label for="crit" class="col-md-9 col-form-label form-control-sm"><h5>Critical Damage (%)</h5></label>
-                            <div class="input-group input-group-sm col-md-3">
-                                <div class="input-group-prepend">
-                                    <button class="btn btn-outline-secondary" type="button" id="crit-minus" onclick="minus('crit')">&minus;</button>
-                                </div>
-                                <input type="number" class="form-control text-center" id="crit" value="250" onkeyup="update('crit')">
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="button" id="crit-plus" onclick="plus('crit')">&plus;</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row col-sm-12">
-                            <input type="range" class="custom-range" id="crit-slide" min="150" max="450" value="250" oninput="slide('crit')">
-                        </div>
-                    </div>
-
-                    <div class="form-group col-sm-12">
-                        <div class="custom-control custom-checkbox custom-control-inline buff-block">
-                            <input class="custom-control-input" type="checkbox" id="elem-adv" value="1.1" onchange="resolve()">
-                            <label class="custom-control-label" for="elem-adv"><span id="elem-adv-icon"></span> Elemental Advantage</label>
-                        </div>
-
-                        <div class="custom-control custom-checkbox custom-control-inline buff-block">
-                            <input class="custom-control-input" type="checkbox" id="atk-up" value="1.5" onchange="resolve()">
-                            <label class="custom-control-label" for="atk-up">
-                                <img src="https://epic7x.com/wp-content/uploads/2018/12/stic_att_up.png" width="20" height="20" /> Increased Attack
-                            </label>
-                        </div>
-
-                        <div class="custom-control custom-checkbox custom-control-inline buff-block">
-                            <input class="custom-control-input" type="checkbox" id="atk-up-great" value="1.75" onchange="resolve()">
-                            <label class="custom-control-label" for="atk-up-great">
-                                <img src="https://epic7x.com/wp-content/uploads/2019/01/greater-attack-icon.png" width="20" height="20" /> Increased Attack (Great)
-                            </label>
-                        </div>
-
-                        <div class="custom-control custom-checkbox custom-control-inline buff-block">
-                            <input class="custom-control-input" type="checkbox" id="rage-set" value="1.3" onchange="resolve()">
-                            <label class="custom-control-label" for="rage-set">Rage Set Proc</label>
-                        </div>
-                    </div>
-                    <hr />
-                </div>
-
-                <div id="artifact-block">
-                    <h4>Artifact</h4>
-                    <div id="artifact-lvl-block" class="stat-block">
-                        <div class="form-group row col-sm-12">
-                            <label for="crit" class="col-md-9 col-form-label form-control-sm"><h5>Level</h5></label>
-                            <div class="input-group input-group-sm col-md-3">
-                                <div class="input-group-prepend">
-                                    <button class="btn btn-outline-secondary" type="button" id="artifact-lvl-minus" onclick="minus('artifact-lvl')">&minus;</button>
-                                </div>
-                                <input type="number" class="form-control text-center" id="artifact-lvl" min="0" max="30" value="0" readonly onkeyup="update('artifact-lvl')">
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="button" id="artifact-lvl-plus" onclick="plus('artifact-lvl')">&plus;</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row col-sm-12">
-                            <input type="range" class="custom-range" id="artifact-lvl-slide" min="0" max="30" value="0" oninput="slide('artifact-lvl')">
-                        </div>
-                    </div>
-                    <div id="artifact-custom-block"></div>
-                    <hr />
-                </div>
-
-                <div class="row">
-                    <h4 class="col-md-8">Target</h4>
-                    <div class="form-group col-md-4 col-sm-12">
-                        <select id="def-preset" name="def-preset" class="form-control custom-select selectpicker" data-size="10" data-show-subtext="true">
-                            <option value="">Manual</option>
-                            <option data-divider="true"></option>
-                            <optgroup label="Wyvern 11">
-                                <option value="blaze-dragona" data-def="984" data-hp="14158" data-subtext="14158 hp">Blaze Dragona</option>
-                                <option value="blood-ridge-naga" data-def="1183" data-hp="11851" data-subtext="11851 hp">Blood Ridge Naga</option>
-                                <option value="wyvern11" data-def="1254" data-hp="139308" data-subtext="139308 hp" data-elem-extra-dmg="ice" data-extra-dmg-pc="1.3">Wyvern</option>
-                            </optgroup>
-                            <optgroup label="Golem 11">
-                                <option value="golem11" data-def="1306" data-hp="101983" data-subtext="101983 hp" data-elem-extra-dmg="fire" data-extra-dmg-pc="1.3">Golem</option>
-                            </optgroup>
-                            <optgroup label="Banshee 11">
-                                <option value="mystychain" data-def="1157" data-hp="9631" data-subtext="9631 hp/154 spd">Mystychain</option>
-                                <option value="icy-dark-broom" data-def="1157" data-hp="9631" data-subtext="9631 hp/152 spd">Icy Dark Broom</option>
-                                <option value="banshee11" data-def="1841" data-hp="60624" data-subtext="60624 hp/160 spd" data-elem-extra-dmg="earth" data-extra-dmg-pc="1.3">Banshee</option>
-                            </optgroup>
-                            <optgroup label="Azimanak 11">
-                                <option value="striker-raqix-warlord" data-def="1030" data-hp="12812" data-subtext="12812 hp/190 spd">Striker Warlord</option>
-                                <option value="karax-charger" data-def="1150" data-hp="20814" data-subtext="20814 hp">Karax Charger</option>
-                                <option value="egg" data-def="540" data-hp="8098" data-subtext="8098 hp">Egg</option>
-                                <option value="azimanak11" data-def="1825" data-hp="87729" data-subtext="87729 hp">Azimanak</option>
-                            </optgroup>
-                        </select>
-                    </div>
-                </div>
-                <div id="target-block">
-                    <div class="stat-block">
-                        <div class="form-group row col-sm-12">
-                            <label for="crit" class="col-md-9 col-form-label form-control-sm"><h5>Defense</h5></label>
-                            <div class="input-group input-group-sm col-md-3">
-                                <div class="input-group-prepend">
-                                    <button class="btn btn-outline-secondary" type="button" id="def-minus" onclick="minus('def')">&minus;</button>
-                                </div>
-                                <input type="number" class="form-control text-center" id="def" value="1000" onkeyup="update('def')">
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="button" id="def-plus" onclick="plus('def')">&plus;</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row col-sm-12">
-                            <input type="range" class="custom-range" id="def-slide" min="200" max="5000" value="750" oninput="slide('def')">
-                        </div>
-                    </div>
-
-                    <div class="form-group col-sm-12">
-                        <div class="custom-control custom-checkbox custom-control-inline buff-block">
-                            <input class="custom-control-input" type="checkbox" id="def-up" value="1.6" onchange="resolve()">
-                            <label class="custom-control-label" for="def-up">
-                                <img src="https://epic7x.com/wp-content/uploads/2018/12/stic_def_up.png" width="20" height="20" /> Increased Defense
-                            </label>
-                        </div>
-
-                        <div class="custom-control custom-checkbox custom-control-inline buff-block">
-                            <input class="custom-control-input" type="checkbox" id="def-down" value="0.3" onchange="resolve()">
-                            <label class="custom-control-label" for="def-down">
-                                <img src="https://epic7x.com/wp-content/uploads/2018/12/stic_def_dn.png" width="20" height="20" /> Decreased Defense
-                            </label>
-                        </div>
-
-                        <div class="custom-control custom-checkbox custom-control-inline buff-block">
-                            <input class="custom-control-input" type="checkbox" id="target" value="1.15" onchange="resolve()">
-                            <label class="custom-control-label" for="target">
-                                <img src="https://epic7x.com/wp-content/uploads/2018/12/target-debuff-e7.png" width="20" height="20" /> Target
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <hr />
-
-                <div>
-                    <h4>Hero Specific</h4>
-                    <div id="custom-block"></div>
-                    <hr />
-                </div>
-
-
-                <h4>Skill Enhance</h4>
-                <div id="molagora-block"></div>
-            </form>
-        </div>
-
-        <div id="damage-block">
-            <h4>
-                Damage
-                <span id="barrier-block" class="badge badge-light float-right">
-                    <img src="https://epic7x.com/wp-content/uploads/2018/12/stic_protect.png" width="20" height="20" /> <span id="barrier"></span>
-                </span>
-                <span id="bleed-damage-block" class="badge badge-light float-right">
-                    <img src="https://epic7x.com/wp-content/uploads/2018/12/stic_blood.png" width="20" height="20" /> <span id="bleed-damage"></span>
-                </span>
-                <span id="burn-damage-block" class="badge badge-light float-right">
-                    <img src="https://epic7x.com/wp-content/uploads/2018/12/stic_blaze.png" width="20" height="20" /> <span id="burn-damage"></span>
-                </span>
-            </h4>
-            <div>
-                <table class="table table-bordered table-sm col-sm-12">
-                    <thead class="table-secondary">
-                        <tr>
-                            <th>Skill</th>
-                            <th>Critical Hit</th>
-                            <th>Crushing Hit</th>
-                            <th>Normal Hit</th>
-                            <th>Miss</th>
-                        </tr>
-                    </thead>
-                    <tbody id="damage"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <footer class="page-footer pt-3 mt-5">
-            <div class="container-fluid text-center text-md-left">
-                <div class="row">
-                    <div class="col-md-6 mt-md-0 mt-3">
-                        <h5 class="text-uppercase">Credits</h5>
-                        <p>
-                            Discord: Maphe#1384<br/>
-                            Thanks for the help: okloio, haie
-                        </p>
-                    </div>
-                    <hr class="clearfix w-100 d-md-none pb-3">
-                    <div class="col-md-3 mb-md-0 mb-3">
-                        <h5 class="text-uppercase">Reference</h5>
-                        <ul class="list-unstyled">
-                            <li>
-                                <a href="https://docs.google.com/spreadsheets/d/1aqL0Uj26PRW_jAUj8pYaSls_DOuFq30fvwQh8ol74-E/htmlview">Multiplier Spreadsheet</a>
-                            </li>
-                            <li>
-                                <a href="http://www.epicseventools.com/DamageCalculator">Budandan Calculator</a>
-                            </li>
-                            <li>
-                                <a href="https://epic7x.com">Epic 7x</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-md-3 mb-md-0 mb-3">
-                        <h5 class="text-uppercase">Contribute</h5>
-                        <ul class="list-unstyled">
-                            <li>
-                                <a href="https://github.com/maphe/maphe.github.io/issues/new">Raise a bug</a>
-                            </li>
-                            <li>
-                                <a href="https://github.com/maphe/maphe.github.io/blob/master/e7-damage-calc/README.md">Coming features</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </footer>
-
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.12/dist/js/bootstrap-select.min.js"></script>
-        <script src="form.js"></script>
-        <script src="heroes.js"></script>
-        <script src="artifacts.js"></script>
-        <script src="calculator.js"></script>
-    </body>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="css/main.css">
+		<script src="js/vue.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="vue-div" class="container full">
+			<div class="dropdown third">
+				<button class="ddbutton" v-on:click="ddclicked()"> Hero 1: {{hero.name}} </button>
+				<div v-if="ddshow" class="dd">
+					<input class="full" list="heroDD" v-model.lazy="heroSelected" id="hero-choice" name="hero-choice"  v-on:change="getData(heroSelected)" placeholder="select a hero"/>
+					<datalist id="heroDD">
+						<option v-for="hero in heroList"> {{hero.name}}</option>
+					</datalist>
+				</div>
+			</div>
+			<div class="stats third">
+				<div v-if="showSkill" >
+					<p id="heroName"> {{hero.name}} <p>
+					<p >Attack:</p> <input class="full" v-model.lazy="heroS.atk" type="number" v-on:change="getDMG(hero)"> </input>
+					<p>Defense:</p> <input class="full"v-model.lazy="heroS.def" type="number" v-on:change="getDMG(hero)"> </input>
+					<p>Health:</p> <input class="full" v-model.lazy="heroS.hp" type="number" v-on:change="getDMG(hero)"> </input>
+					<p>Speed:</p> <input class="full" v-model.lazy="heroS.spd" type="number" v-on:change="getDMG(hero)"> </input>
+					<p>Critical Hit Chance:</p> <input class="full" v-model.lazy="heroS.chc" type="number" v-on:change="getDMG(hero)"> </input>
+					<p>Critical Hit Damage:</p> <input class="full" v-model.lazy="heroS.chd" type="number" v-on:change="getDMG(hero)"> </input>
+					<p>Effectiveness:</p> <input class="full" v-model.lazy="heroS.eff" type="number" v-on:change="getDMG(hero)"> </input>
+					<p>Dual Attack Chance:</p> <input class="full" v-model.lazy="heroS.dac" type="number" v-on:change="getDMG(hero)"> </input>
+				</div>
+			</div>
+			<div class="skills third">
+				<div v-if="showSkill" class="full">
+					<div v-for="skill in hero.skills" v-if="skill.enhance != null" class="full">
+						{{skill.name}}:  
+						<div class="container">
+							<button class="minusMola quarter" v-on:click="subtractMola(skill), getDMG(hero)"> - </button> 
+							<input class="mola half" v-model.lazy="skill.mola" min="0" v-bind:max="skill.enhance.length" type="number" v-on:change="getDMG(hero)"> </input>
+							<button class="addMola quarter" v-on:click="addMola(skill),getDMG(hero)"> + </button>
+						</div>
+						/ {{skill.enhance.length}} <br>
+						Damage: {{skill.dmg}}
+						<input id="s1" v-model.lazy="skill.mola" type="range" min="0" value="0" v-bind:max="skill.enhance.length" v-on:change="getDMG(hero)">
+						<div v-if="skill.soulburn">
+							<button class="sbbutton" v-on:click="sbclicked()"> SoulBurn: {{soulburn}} </button>
+						</div>
+						<div v-if="skill.extraAtk">
+							{{skill.name}}: {{skill.XtraAtkdmg}}
+						</div>
+					</div>
+					<div v-for="skill in hero.skills">
+						{{skill.name}}   
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="js/hero.js"></script>
+		<script src="js/main.js" type="text/javascript"></script>
+	</body>
 </html>

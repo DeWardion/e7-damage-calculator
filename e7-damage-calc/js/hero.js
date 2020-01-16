@@ -142,7 +142,6 @@ const heroes = {
 		name: 'Alexa',
 		element: element.ice,
 		classType: classType.thief,
-		//form: [elements.target_nb_debuff],
 		stats: {}, skills: {
 			s1: { 
 				dmg: 0,
@@ -738,13 +737,12 @@ const heroes = {
 		atkUp: () => {
 			let mult = 1;
 			let boost = 0.167;
-			for (let i = 0; i < Number(document.getElementById(`molagora-s2`).value); i++) {
+			for (let i = 0; i < heroes.blood_blade_karin.skills.s2.mola; i++) {
 				boost += 0.167 * heroes.blood_blade_karin.skills.s2.enhance[i];
 			}
-
-			if (app.heroS.curHP < 75) mult += boost;
-			if (app.heroS.curHP < 50) mult += boost;
-			if (app.heroS.curHP < 25) mult += boost;
+			if ( ((app.heroS.curHP/app.heroS.hp)*100) < 75) mult += boost;
+			if ( ((app.heroS.curHP/app.heroS.hp)*100) < 50) mult += boost;
+			if ( ((app.heroS.curHP/app.heroS.hp)*100) < 25) mult += boost;
 
 			return mult;
 		},
@@ -771,6 +769,7 @@ const heroes = {
 			},
 		}
 	},
+	
 	butcher_corps_inquisitor: {
 		name: 'Butcher Corps Inquisitor',
 		element: element.fire,
@@ -790,7 +789,7 @@ const heroes = {
 				soulburn: true,
 				rate: (soulburn) => soulburn ? 2.2 : 1.5,
 				pow: 0.85,
-				mult: () => 1 + (100-app.heroS.curHP)*0.005,
+				mult: () => 1 + (100-((app.heroS.curHP/app.heroS.hp)*100))*0.005,
 				enhance: [0.05, 0.05, 0, 0.1, 0.1, 0.15]
 			},
 		}
@@ -1101,7 +1100,7 @@ const heroes = {
 				name: 'S1', mola: 0,
 				rate: 1,
 				pow: 0.95,
-				mult: () => 1 + (100-app.enemy.curHP)*0.002,
+				mult: () => 1 + (100 - Math.ceil((app.enemy.curHP/app.enemy.hp)*100))*0.002,
 				enhance: [0.05, 0.05, 0.1, 0.15]
 			},
 			s2: { 
@@ -1110,7 +1109,7 @@ const heroes = {
 				soulburn: true,
 				rate: (soulburn) => soulburn ? 1 : 0.8,
 				pow: 0.95,
-				mult: () => 1 + (100-app.enemy.curHP)*0.005,
+				mult: () => 1 + (100 - Math.ceil((app.enemy.curHP/app.enemy.hp)*100))*0.005,
 				enhance: [0.05, 0.05, 0.1, 0.15]
 			},
 			s3: { 
@@ -1150,7 +1149,7 @@ const heroes = {
 				rate: 1.2,
 				pow: 1,
 				mult: () => {
-					switch (app.enemy.numTargets) {
+					switch (parseInt(app.enemy.numTargets)) {
 						case 3: return 1.534;
 						case 2: return 1.801;
 						case 1: return 2.068;
@@ -1242,7 +1241,7 @@ const heroes = {
 				name: 'S1', mola: 0,
 				rate: 1,
 				pow: 0.95,
-				mult: () => 1 + (100-app.enemy.curHP)*0.002,
+				mult: () => 1 + (100 - Math.ceil((app.enemy.curHP/app.enemy.hp)*100))*0.002,
 				enhance: [0.05, 0.05, 0.1, 0.15]
 			},
 			s2: { 
@@ -1250,7 +1249,7 @@ const heroes = {
 				name: 'S2', mola: 0,
 				rate: (soulburn) => soulburn ? 1 : 0.8,
 				pow: 0.95,
-				mult: () => 1 + (100-app.enemy.curHP)*0.005,
+				mult: () => 1 + (100 - Math.ceil((app.enemy.curHP/app.enemy.hp)*100))*0.005,
 				enhance: [0.05, 0.05, 0.1, 0.15]
 			},
 			s3: { 
@@ -1394,7 +1393,7 @@ const heroes = {
 				name: 'S3', mola: 0,
 				rate: 1.5,
 				pow: 0.95,
-				mult: () => 1 + (100-app.enemy.curHP)*0.005,
+				mult: () => 1 + (100 - Math.ceil((app.enemy.curHP/app.enemy.hp)*100))*0.005,
 				enhance: [0.05, 0.05, 0, 0.1, 0.15]
 			}
 		}
@@ -1600,7 +1599,7 @@ const heroes = {
 				name: 'S1', mola: 0,
 				rate: 0.7,
 				pow: 1,
-				mult: () => app.enemy.debuffs ? 1.3 : 1.0,
+				mult: () => (app.enemy.numDebuffs > 0) ? 1.3 : 1.0,
 				enhance: [0.05, 0.05, 0.05, 0.05, 0.1]
 			},
 			s2: { 
@@ -1734,7 +1733,7 @@ const heroes = {
 				name: 'S1', mola: 0,
 				rate: 1,
 				pow: 1,
-				mult: () => 1 + (100 - (app.enemy.curHP/app.enemy.hp))*0.005,
+				mult: () => 1 + (100 - Math.ceil((app.enemy.curHP/app.enemy.hp)*100))*0.005,
 				enhance: [0.05, 0, 0, 0.1, 0.15]
 			},
 			s2: { 
@@ -2022,7 +2021,7 @@ const heroes = {
 				rate: 1,
 				pow: 1,
 				mult: () => {
-					switch (app.enemy.numTargets) {
+					switch (parseInt(app.enemy.numTargets)) {
 						case 1: return 2.5;
 						case 2: return 2.0;
 						default: return 1.0;
@@ -2172,7 +2171,7 @@ const heroes = {
 				name: 'S2', mola: 0,
 				rate: 1,
 				pow: 1,
-				mult: () => 1 + (app.enemy.numTargets-1)*0.1,
+				mult: () => 1 + (parseInt(app.enemy.numTargets)-1)*0.1,
 				enhance: [0.05, 0.05, 0.1, 0.1]
 			},
 			s3: { 
@@ -2240,7 +2239,7 @@ const heroes = {
 				soulburn: true,
 				rate: (soulburn) => soulburn ? 1.35 : 0.95,
 				pow: 1,
-				mult: () => 1 + (100-app.heroS.curHP)*0.0015 + (app.heroS.EE1 ? 0.1 : 0),
+				mult: () => 1 + ((app.heroS.hp-app.heroS.curHP)/100)*0.0015 + (app.heroS.EE1 ? 0.1 : 0),
 				enhance: [0.05, 0.05, 0, 0.05, 0, 0.15]
 			},
 			s3: { 
@@ -2248,7 +2247,7 @@ const heroes = {
 				name: 'S3', mola: 0,
 				rate: 1.7,
 				pow: 0.9,
-				mult: () => 1 + (100-app.heroS.curHP)*0.003 + (app.heroS.EE2 ? 0.1 : 0),
+				mult: () => 1 + ((app.heroS.hp-app.heroS.curHP)/100)*0.003 + (app.heroS.EE2 ? 0.1 : 0),
 				enhance: [0.05, 0.05, 0, 0.1, 0.1, 0.1]
 			}
 		}
@@ -2298,7 +2297,7 @@ const heroes = {
 				name: 'S1', mola: 0,
 				rate: 1,
 				pow: 1,
-				afterMath: () => app.enemy.debuffs ? { atkPercent: 0.6, penetrate: 0.7 } : null,
+				afterMath: () => (app.enemy.numDebuffs > 0) ? { atkPercent: 0.6, penetrate: 0.7 } : null,
 				enhance: [0.05, 0, 0.1, 0, 0.15]
 			},
 			s2: { 
@@ -2415,7 +2414,7 @@ const heroes = {
 				name: 'S3', mola: 0,
 				rate: 1.6,
 				pow: 1,
-				mult: () => 1 + app.heroS.curHP*0.0035,
+				mult: () => 1 + ((app.heroS.curHP/app.heroS.hp)*100)*0.0035,
 				enhance: [0.05, 0.05, 0, 0.1, 0.1]
 			}
 		}
@@ -2513,7 +2512,7 @@ const heroes = {
 				soulburn: true,
 				rate: (soulburn) => soulburn ? 1.2 : 1,
 				pow: 1,
-				mult: () => 1 + (100-app.enemy.curHP)*0.002,
+				mult: () => 1 + (100 - Math.ceil((app.enemy.curHP/app.enemy.hp)*100))*0.002,
 				enhance: [0.05, 0.05, 0, 0.05, 0.05, 0.1]
 			},
 		}
@@ -2661,8 +2660,8 @@ const heroes = {
 				name: 'S3', mola: 0,
 				rate: 1.5,
 				pow: 0.95,
-				mult: () => 1 + (100-app.enemy.curHP)*0.005,
-				enhance: [0.05, 0.05, 0, 0.1, 0.15]
+				mult: () => 1 + (100 - Math.ceil((app.enemy.curHP/app.enemy.hp)*100))*0.005,
+				enhance: [0.05, 0.05, 0, 0.1, 0.15],
 			}
 		}
 	},
@@ -2726,7 +2725,7 @@ const heroes = {
 				mola: 0,
 				rate: 1,
 				pow: 1,
-				mult: () => 1 + (1-(app.enemy.curHP/100))*0.2,
+				mult: () => 1 + (1-Math.ceil((app.enemy.curHP/app.enemy.hp)*100))*0.2,
 				enhance: [0.05, 0.05, 0.05, 0.05, 0.1]
 			},
 			s2: { 
@@ -2816,7 +2815,7 @@ const heroes = {
 				onlyCrit: true,
 				rate: 1.2,
 				pow: 0.95,
-				mult: () => 1 + (100-app.heroS.curHP)*0.004,
+				mult: () => 1 + (100-((app.heroS.curHP/app.heroS.hp)*100))*0.004,
 				enhance: [0.05, 0.1, 0.15]
 			},
 			s3: { 
@@ -2879,7 +2878,7 @@ const heroes = {
 				soulburn: true,
 				rate: (soulburn) => soulburn ? 1.5 : 1,
 				pow: 1.1,
-				mult: () => 1 + (100-app.heroS.curHP)*0.0035,
+				mult: () => 1 + (100-((app.heroS.curHP/app.heroS.hp)*100))*0.0035,
 				enhance: [0.05, 0, 0.05, 0, 0.1]
 			},
 			s2: { 
@@ -2918,7 +2917,7 @@ const heroes = {
 				rate: (soulburn) => soulburn ? 0.9 : 0.7,
 				pow: 0.9,
 				mult: () => {
-					switch (app.enemy.numTargets) {
+					switch (parseInt(app.enemy.numTargets)) {
 						case 1: return 1.9;
 						case 2: return 1.6;
 						default: return 1;
@@ -2931,7 +2930,7 @@ const heroes = {
 				name: 'S3', mola: 0,
 				rate: 1.2,
 				pow: 0.8,
-				mult: () => 1 + (100-app.enemy.curHP)*0.003,
+				mult: () => 1 + (100 - Math.ceil((app.enemy.curHP/app.enemy.hp)*100))*0.003,
 				enhance: [0.1, 0.1, 0, 0.15, 0.15]
 			}
 		}
@@ -3364,7 +3363,7 @@ const heroes = {
 				name: 'S1', mola: 0,
 				rate: 1,
 				pow: 1,
-				mult: () => app.enemy.debuffs ? 1.1 : 1,
+				mult: () => (app.enemy.numDebuffs > 0) ? 1.1 : 1,
 				enhance: [0.05, 0, 0.1, 0, 0.15]
 			},
 			s2: { 
@@ -3621,7 +3620,7 @@ const heroes = {
 				soulburn: true,
 				rate: (soulburn) => soulburn ? 3.2 : 1.8,
 				pow: 0.95,
-				mult: (soulburn) => 1 + (100-app.enemy.curHP)*(soulburn ? 0.007 : 0.003),
+				mult: (soulburn) => 1 + (100 - Math.ceil((app.enemy.curHP/app.enemy.hp)*100))*(soulburn ? 0.007 : 0.003),
 				enhance: [0.05, 0.05, 0, 0.1, 0.15]
 			}
 		}
@@ -3667,7 +3666,7 @@ const heroes = {
 				name: 'S1', mola: 0,
 				rate: 1,
 				pow: 1,
-				mult: () => elements.exclusive_equipment_1.value() ? 1.2 : 1.0,
+				mult: () => app.heroSEE1 ? 1.2 : 1.0,
 				enhance: [0.05, 0, 0.1, 0, 0.15]
 			},
 			s2: { 
@@ -3750,7 +3749,7 @@ const heroes = {
 				name: 'S1', mola: 0,
 				rate: 1,
 				pow: 1,
-				mult: () => app.enemy.buffs ? 1 : 1.2, // 20% increased damage if target has no buffs
+				mult: () => (app.enemy.buffs = 0) ? 1 : 1.2, // 20% increased damage if target has no buffs
 				enhance: [0.05, 0.05, 0.05, 0.05, 0.1]
 			},
 			s2: { 
@@ -3883,7 +3882,7 @@ const heroes = {
 				name: 'S3', mola: 0,
 				rate: 0.8,
 				pow: 0.8,
-				mult: () => 1 + (100-app.heroS.curHP)*0.005 + (100-app.enemy.curHP)*0.0015,
+				mult: () => 1 + (100-Math.ceil((app.heroS.curHP/app.heroS.hp)*100))*0.005 + (100 - Math.ceil((app.enemy.curHP/app.enemy.hp)*100))*0.0015,
 				enhance: [0.05, 0.05, 0.1, 0, 0.1, 0.1, 0.1]
 			}
 		}
@@ -4260,7 +4259,7 @@ const heroes = {
 				pow: 0.8,
 				mult: () => {
 					let mult = 1 + app.heroS.spd*0.00075;
-					switch (app.enemy.numTargets) {
+					switch (parseInt(app.enemy.numTargets)) {
 						case 2: mult += 0.4; break;
 						case 1: mult += 0.6; break;
 					}
@@ -4276,11 +4275,14 @@ const heroes = {
 				pow: 0.8,
 				mult: () => {
 					const base = app.heroS.EE3 ? 1.3 : 1;
-					switch (app.enemy.numTargets) {
+					//console.log(app.enemy.numTargets);
+				  switch (parseInt(app.enemy.numTargets)) {
 						case 2: return base + 0.4;
 						case 1: return base + 0.6;
 						default: return base;
-					}
+				  }
+					return base;
+
 				},
 				enhance: [0.05, 0.05, 0.05, 0.05, 0.1, 0.1, 0.1]
 			}
@@ -4342,7 +4344,7 @@ const heroes = {
 				soulburn: true,
 				rate: (soulburn) => soulburn ? 2 : 1.5,
 				pow: 0.95,
-				mult: () => app.enemy.debuffs ? 1.3 : 1,
+				mult: () => (app.enemy.numDebuffs > 0) ? 1.3 : 1,
 				enhance: [0.05, 0.05, 0.1, 0.15]
 			},
 			s3: { 

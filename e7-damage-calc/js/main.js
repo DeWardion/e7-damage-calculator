@@ -15,12 +15,12 @@ var app = new Vue ({
 			atk: '2500',
 			def: '800',
 			hp: '6000',
+			curHP:'6000',
 			spd: '100',
 			chc: '15',
 			chd: '150',
 			eff: '0',
 			dac: '5',
-			curHP:'6000',
 			attackStack5: '0',
 			nonAtkStack10: '0',
 			numBuffs: '0',
@@ -44,28 +44,151 @@ var app = new Vue ({
 			hp:'15000',
 			curHP: '15000',
 			defense: '1000',
-			debuffs: false,
-			buffs: false,
-			target: false,
-			numDebuffs: '0',
+			numDebuffs: 0,
 			numTargets: '1',
+			defBreak: false,
+			decSpd: false,
+			atkD: false,
+			stun: false,
+			unhealable: false,
+			cannotBuff: false,
+			sleep: false,
+			decHitChance: false,
+			silence: false,
+			vampiricTouch: false,
+			target: false,
 			magicNail: false,
-			bleed: false,
+			bomb: false,
+			burn: 0,
+			bleed: 0,
+			poison: 0,	
 		}
 	},
 	methods: {
+		defBreakBclicked: function(){
+			//console.log("defBreakBclicked");
+			app.enemy.defBreak = !app.enemy.defBreak;
+			
+			if(app.enemy.defBreak){
+				app.enemy.numDebuffs++;
+			} else {
+				app.enemy.numDebuffs--;
+			}
+		},
+		decSpdBclicked: function(){
+			app.enemy.decSpd = !app.enemy.decSpd;
+			if(app.enemy.decSpd){
+				app.enemy.numDebuffs++;
+			} else {
+				app.enemy.numDebuffs--;
+			}
+		},
+		atkDBclicked: function(){
+			app.enemy.atkD = !app.enemy.atkD;
+			if(app.enemy.atkD){
+				app.enemy.numDebuffs++;
+			} else {
+				app.enemy.numDebuffs--;
+			}
+		},
+		stunBclicked: function(){
+			app.enemy.stun = !app.enemy.stun;
+			if(app.enemy.stun){
+				app.enemy.numDebuffs++;
+			} else {
+				app.enemy.numDebuffs--;
+			}
+		},
+		unhealableBclicked: function(){
+			app.enemy.unhealable = !app.enemy.unhealable;
+			if(app.enemy.unhealable){
+				app.enemy.numDebuffs++;
+			} else {
+				app.enemy.numDebuffs--;
+			}
+		},
+		cannotBuffBclicked: function(){
+			app.enemy.cannotBuff = !app.enemy.cannotBuff;
+			if(app.enemy.cannotBuff){
+				app.enemy.numDebuffs++;
+			} else {
+				app.enemy.numDebuffs--;
+			}
+		},
+		sleepBclicked: function(){
+			app.enemy.sleep = !app.enemy.sleep;
+			if(app.enemy.sleep){
+				app.enemy.numDebuffs++;
+			} else {
+				app.enemy.numDebuffs--;
+			}
+		},
+		silenceBclicked: function(){
+			app.enemy.silence = !app.enemy.silence;
+			if(app.enemy.silence){
+				app.enemy.numDebuffs++;
+			} else {
+				app.enemy.numDebuffs--;
+			}
+		},
+		decHitChanceBclicked: function(){
+			app.enemy.decHitChance = !app.enemy.decHitChance;
+			if(app.enemy.decHitChance){
+				app.enemy.numDebuffs++;
+			} else {
+				app.enemy.numDebuffs--;
+			}
+		},
+		vampiricTouchBclicked: function(){
+			app.enemy.vampiricTouch = !app.enemy.vampiricTouch;
+			if(app.enemy.vampiricTouch){
+				app.enemy.numDebuffs++;
+			} else {
+				app.enemy.numDebuffs--;
+			}
+		},
+		targetBclicked: function(){
+			app.enemy.target = !app.enemy.target;
+			if(app.enemy.target){
+				app.enemy.numDebuffs++;
+			} else {
+				app.enemy.numDebuffs--;
+			}
+		},
+		magicNailBclicked: function(){
+			app.enemy.magicNail = !app.enemy.magicNail;
+			if(app.enemy.magicNail){
+				app.enemy.numDebuffs++;
+			} else {
+				app.enemy.numDebuffs--;
+			}
+		},
+		bombBclicked: function(){
+			app.enemy.bomb = !app.enemy.bomb;
+			if(app.enemy.bomb){
+				app.enemy.numDebuffs++;
+			} else {
+				app.enemy.numDebuffs--;
+			}
+		},
+		burnBclicked: function(){
+		},
+		bleedBclicked: function(){
+		},
+		poisonBClicked: function(){
+		},
 		ddclicked: function(){
 			app.ddshow = true;
-			console.log("dd button clicked");
-			console.log(app.ddshow);
+			//console.log("dd button clicked");
+			//console.log(app.ddshow);
 		},
 		sbclicked: function(){
 			app.soulburn = !app.soulburn;
-			console.log("SB CLICKED"+app.soulburn);
+			//console.log("SB CLICKED"+app.soulburn);
 			app.getDMG(app.hero);
 		},
 		getData: function(hero){
-			console.log(hero);
+			//console.log(hero);
 			app.ddshow = false;
 			
 			for (key in heroes) {
@@ -78,7 +201,7 @@ var app = new Vue ({
 			
 			app.hero.stats = app.heroS;
 			app.soulburn = false,
-			app.targetBool = false,
+			app.enemy.targetBool = false,
 			app.elemAdvBool = false,
 			app.heroSelected = '',
 
@@ -103,7 +226,7 @@ var app = new Vue ({
 		addMola: function(skill){
 			mola = parseInt(skill.mola,10);
 			if(mola + 1 > skill.enhance.length){
-				console.log("maxed");
+				//console.log("maxed");
 			} else {
 				mola =mola + 1;
 			}
@@ -112,7 +235,7 @@ var app = new Vue ({
 		subtractMola: function(skill){
 			mola = parseInt(skill.mola,10);
 			if (mola - 1 < 0) {
-				console.log("min'd");
+				//console.log("min'd");
 			} else {
 				mola = mola - 1;
 			}
@@ -120,15 +243,15 @@ var app = new Vue ({
 		},
 		showSkills: function(hero){
 			app.showSkill = true;
-			console.log("this meme was sent by the show skills gang");
+			//console.log("this meme was sent by the show skills gang");
 			app.getDMG(app.hero);
-			console.log(app.hero.skills);
+			//console.log(app.hero.skills);
 		},
 		getDMG: function(hero){
 			for(skill in hero.skills){
 				if (hero.skills[skill].enhance.length != 0){
 
-					var hit = app.getFlatDmg(skill);
+					var hit = app.getFlatDmg(skill)/ app.getDef(skill);;
 					var critDmg = (app.heroS.chd / 100)+(skill.critDmgBoost ? skill.critDmgBoost(soulburn) : 0) /*+(this.artifact.getCritDmgBoost()||0)*/;
 					//mola = 1;
 					//for (i = 0; i < hero.skills[skill].mola; i++){
@@ -137,6 +260,14 @@ var app = new Vue ({
 					hero.skills[skill].dmg =  Math.round(hit*critDmg);
 				}
 			}
+		},
+		getDef: function(skill){
+			let mult = 1.0;
+			if(app.enemy.defBreak){
+				mult = mult*.3;
+			}
+			//console.log("def:"+ mult);
+			return (((app.enemy.defense * mult)/300) * (1-(skill && skill.penetrate ? skill.penetrate() : 0))) + 1;
 		},
 		getFlatDmg: function(skillId, soulburn){
 			const skill = app.hero.skills[skillId];
@@ -151,14 +282,15 @@ var app = new Vue ({
 				mola = mola + app.hero.skills[skillId].enhance[i];
 			}
 			const elemAdv = app.elemAdvBool ? 1.3 : 1.0;
-			const target = app.targetBool ? 1.3 : 1.0;
+			const target = app.enemy.targetBool ? 1.3 : 1.0;
 
-			let dmgMod = 1.0;	/*getGlobalDamageMult(this) + /*this.artifact.getDamageMultiplier()(skill.mult ? skill.mult(soulburn)-1 : 0);*/ 
+			let dmgMod = 1.0 /*getGlobalDamageMult(this) + /*this.artifact.getDamageMultiplier()*/ +(skill.mult ? skill.mult(soulburn)-1 : 0);
+			//console.log(dmgMod);
 			return (((atk*rate + flatMod)*1.871 /*+ flatMod2*/) * pow * mola * elemAdv * target * dmgMod);
 		},
 		getAtk: function(){
 			var modAtk = (app.hero.atkUp != undefined) ? app.hero.atkUp()*app.heroS.atk : app.heroS.atk;
-			console.log("mod:"+modAtk);
+			//console.log("mod:"+modAtk);
 			return modAtk;
 		}
 	}

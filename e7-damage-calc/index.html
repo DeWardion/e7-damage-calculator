@@ -3,6 +3,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" type="text/css" href="css/main.css">
 		<script src="js/vue.js" type="text/javascript"></script>
+		<script src="js/hero.js"></script>
+
 	</head>
 	<body>
 		<div id="vue-div" class="container full">
@@ -18,7 +20,7 @@
 			<div class="stats third">
 				<div v-if="showSkill" >
 					<p id="heroName"> {{hero.name}} <p>
-					<p >Attack:</p> <input class="full" v-model.lazy="heroS.atk" type="number" v-on:change="getDMG(hero)"> </input>
+					<p>Attack:</p> <input class="full" v-model.lazy="heroS.atk" type="number" v-on:change="getDMG(hero)"> </input>
 					<p>Defense:</p> <input class="full"v-model.lazy="heroS.def" type="number" v-on:change="getDMG(hero)"> </input>
 					<p>Health:</p> <input class="full" v-model.lazy="heroS.hp" type="number" v-on:change="getDMG(hero)"> </input>
 					<p>Speed:</p> <input class="full" v-model.lazy="heroS.spd" type="number" v-on:change="getDMG(hero)"> </input>
@@ -47,13 +49,35 @@
 							{{skill.name}}: {{skill.XtraAtkdmg}}
 						</div>
 					</div>
-					<div v-for="skill in hero.skills">
-						{{skill.name}}   
+					<div class="enemy stats">
+						<p>Enemy Total HP</p> <input class="full" v-model.lazy="enemy.hp" type="number" v-on:change="getDMG(hero)"> </input>
+						<p>Enemy Current HP</p> <input class="full" v-model.lazy="enemy.curHP" type="number" v-on:change="getDMG(hero)"> </input>
+						<p>Enemy Defense</p> <input class="full" v-model.lazy="enemy.defense" type="number" v-on:change="getDMG(hero)"> </input>
+						<p>Number Of Enemies</p> <input class="full" v-model.lazy="enemy.numTargets" type="number" v-on:change="getDMG(hero)"> </input>
+					</div>
+					<div class="debuffs">
+						Enemy Debuffs: {{enemy.numDebuffs}};
+						<button class="defBreakButton full" v-on:click="defBreakBclicked(), getDMG(hero)"> Defense Break: {{enemy.defBreak}} </button>
+						<button class="decSpdButton full" v-on:click="decSpdBclicked(), getDMG(hero)"> Decrease Speed: {{enemy.decSpd}} </button>
+						<button class="atkDButton full" v-on:click="atkDBclicked(), getDMG(hero)"> Decrease Attack: {{enemy.atkD}} </button>
+						<button class="stunButton full" v-on:click="stunBclicked(), getDMG(hero)"> Stun: {{enemy.stun}} </button>
+						<button class="unhealButton full" v-on:click="unhealableBclicked(), getDMG(hero)"> Unhealable: {{enemy.unhealable}} </button>
+						<button class="cannotBuffButton full" v-on:click="targetBclicked(), getDMG(hero)"> CannotBuff: {{enemy.cannotBuff}} </button>
+						<button class="sleepButton full" v-on:click="sleepBclicked(), getDMG(hero)"> Sleep: {{enemy.sleep}} </button>
+						<button class="decHitChanceButton full" v-on:click="decHitChanceBclicked(), getDMG(hero)"> Decrease Hit Chance: {{enemy.decHitChance}} </button>
+						<button class="silenceButton full" v-on:click="silenceBclicked(), getDMG(hero)"> Silence: {{enemy.silence}} </button>
+						<button class="vampiricTouchButton full" v-on:click="targetBclicked(), getDMG(hero)"> Vampiric Touch: {{enemy.vampiricTouch}} </button>
+						<button class="targetButton full" v-on:click="targetBclicked(), getDMG(hero)"> Target: {{enemy.target}} </button>
+						<button class="magicNailButton full" v-on:click="magicNailBclicked(), getDMG(hero)"> Magic Nail: {{enemy.magicNail}} </button>
+						<button class="bombButton full" v-on:click="bombBclicked(), getDMG(hero)"> Bomb: {{enemy.bomb}} </button>
+						
+						<button class="burnButton" v-on:click="burnBclicked()"> Target: {{enemy.burn}} </button>
+						<button class="bleedButton" v-on:click="bleedBclicked()"> Target: {{enemy.bleed}} </button>
+						<button class="poisonButton" v-on:click="poisonBclicked()"> Target: {{enemy.poison}} </button>
 					</div>
 				</div>
 			</div>
 		</div>
-		<script src="js/hero.js"></script>
 		<script src="js/main.js" type="text/javascript"></script>
 	</body>
 </html>
